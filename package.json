@@ -1,0 +1,30 @@
+{
+  "name": "car-management-api",
+  "version": "1.0.0",
+  "description": "Repository of challenge 5 about RestAPI",
+  "main": "main.js",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon main.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yogatiara/Car-Management-API.git"
+  },
+  "author": "Yoga Tiara Wiguna",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yogatiara/Car-Management-API/issues"
+  },
+  "homepage": "https://github.com/Yogatiara/Car-Management-API#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "nodemon": "^3.0.1",
+    "sequelize": "^6.33.0"
+  },
+  "devDependencies": {
+    "morgan": "^1.10.0"
+  }
+}
