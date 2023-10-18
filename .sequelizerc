@@ -1,0 +1,15 @@
+const dotenv = require('dotenv');
+const path = require('path');
+
+// To read dotenv during the migration
+dotenv.config();
+
+module.exports = {
+  config: path.resolve(
+    'configs',
+    'databaseConfig.js'
+  ),
+  'models-path': path.resolve('src', 'models'),
+  // 'seeders-path': path.resolve('seeders'),
+  // 'migrations-path': path.resolve('migrations'),
+};

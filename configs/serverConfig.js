@@ -1,5 +1,4 @@
-import dotenv from 'dotenv';
-dotenv.config();
+require('dotenv').config();
 
 const { PORT, HOST } = process.env;
 
@@ -9,4 +8,7 @@ if (!PORT) {
   throw new Error('Host is required');
 }
 
-export { PORT, HOST };
+module.exports = {
+  PORT,
+  HOST,
+};

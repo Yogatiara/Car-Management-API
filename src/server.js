@@ -1,9 +1,9 @@
-import {
+const {
   PORT,
   HOST,
-} from '../configs/serverConfig.js';
+} = require('../configs/serverConfig.js');
 
-import app from './app.js';
+const app = require('./app.js');
 
 const server = app.listen(PORT, () => {
   console.log(
@@ -11,4 +11,4 @@ const server = app.listen(PORT, () => {
   );
 });
 
-export default server;
+module.exports = server;

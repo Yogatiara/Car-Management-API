@@ -1,2 +1,2 @@
-import './src/server.js';
-import './configs/databaseConfig.js';
+require('./src/server.js');
+require('./configs/databaseConfig.js');
