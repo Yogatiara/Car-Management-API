@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const { PORT, HOST } = process.env;
 
 if (!PORT) {

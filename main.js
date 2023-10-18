@@ -1,2 +1,8 @@
+require('dotenv').config();
+
 require('./src/server.js');
-require('./configs/databaseConfig.js');
+const {
+  databaseValidation,
+} = require('./configs/databaseConfig.js');
+
+databaseValidation();
