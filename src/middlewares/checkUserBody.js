@@ -1,6 +1,6 @@
 const ApiError = require('../utils/ApiError');
 
-const checkBody = (req, res, next) => {
+const checkUserBody = (req, res, next) => {
   try {
     const { name, age, address } = req.body;
 
@@ -33,4 +33,4 @@ const checkBody = (req, res, next) => {
   }
 };
 
-module.exports = checkBody;
+module.exports = checkUserBody;

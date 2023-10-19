@@ -1,11 +1,11 @@
 const router = require('express').Router();
 
-const checkBody = require('../middlewares/checkBody');
+const checkUserBody = require('../middlewares/checkUserBody');
 const User = require('../controllers/userController');
 
 router
   .route('/')
-  .post(checkBody, User.createUser)
+  .post(checkUserBody, User.createUser)
   .get(User.findUser)
   .delete(User.clearUser);
 

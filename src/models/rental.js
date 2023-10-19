@@ -14,12 +14,19 @@ module.exports = (sequelize, DataTypes) => {
           name: 'carId',
         },
       });
+
+      Rental.belongsTo(models.User, {
+        foreignKey: {
+          name: 'rentalId',
+        },
+      });
     }
   }
   Rental.init(
     {
       price: DataTypes.INTEGER,
       carId: DataTypes.INTEGER,
+      userId: DataTypes.INTEGER,
     },
     {
       sequelize,
