@@ -13,8 +13,8 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      age: {
-        type: Sequelize.INTEGER,
+      noTelepon: {
+        type: Sequelize.STRING,
         allowNull: false,
       },
       address: {
@@ -24,7 +24,7 @@ module.exports = {
       role: {
         allowNull: false,
         type: Sequelize.ENUM(
-          'super admin',
+          'superadmin',
           'admin',
           'member'
         ),

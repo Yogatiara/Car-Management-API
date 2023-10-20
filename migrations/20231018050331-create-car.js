@@ -22,8 +22,9 @@ module.exports = {
         ),
       },
       image: {
-        allowNull: false,
         type: Sequelize.TEXT,
+        defaultValue:
+          'https://pictures.dealer.com/c/caldwellcountrychevrolettx/1134/a976281f56ff06d46dc390283aa14da6x.jpg?impolicy=downsize_bkpt&imdensity=1&w=520',
       },
       createdAt: {
         allowNull: false,

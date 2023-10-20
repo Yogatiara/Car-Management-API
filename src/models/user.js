@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
   User.init(
     {
       name: DataTypes.STRING,
-      age: DataTypes.INTEGER,
+      noTelepon: DataTypes.STRING,
       address: DataTypes.STRING,
       role: {
         allowNull: false,

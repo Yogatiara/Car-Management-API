@@ -1,41 +1,56 @@
 const { Car } = require('../models');
 const ApiError = require('../utils/ApiError');
+const imagekit = require('../../lib/imagekit');
 
 const createCar = async (req, res, next) => {
   try {
-    const { name, age, address } = req.body;
-    console.log(name);
+    const { name, type } = req.body;
+    const file = req.file;
+    let image;
 
-    const newCar = await Car.create({
-      name: name,
-      age: age,
-      address: address,
-    });
+    if (file) {
+      const splitNameFile =
+        file.originalname.split('.');
+      const extentionFile =
+        splitNameFile[splitNameFile.length - 1];
+
+      const uploadImage = await imagekit.upload({
+        file: file.buffer,
+        fileName: `${file.name}.${extentionFile}`,
+      });
+
+      image = uploadImage.url;
+
+      const newCar = await Car.create({
+        name: name,
+        type: type,
+      });
+    }
 
     res.status(200).json({
       status: 'Success',
-      data: {
-        dataCar: newCar,
-      },
     });
   } catch (err) {
     next(new ApiError(err.message, 500));
   }
 };
 
-const findUser = async (req, res, next) => {
+const findCar = async (req, res, next) => {
   try {
-    const userData = await User.findAll();
-    if (userData == 0) {
+    const carData = await Car.findAll();
+    if (carData == 0) {
       return next(
-        new ApiError('Database is empty!', 400)
+        new ApiError(
+          'Car database is empty!',
+          400
+        )
       );
     }
 
     res.status(200).json({
       status: 'success',
       data: {
-        userData,
+        carData,
       },
     });
   } catch (err) {
@@ -186,10 +201,10 @@ const clearUser = async (req, res, next) => {
 };
 
 module.exports = {
-  createUser,
-  findUser,
-  findUserById,
-  updateUser,
-  deleteUser,
-  clearUser,
+  createCar,
+  findCar,
+  // findUserById,
+  // updateUser,
+  // deleteUser,
+  // clearUser,
 };

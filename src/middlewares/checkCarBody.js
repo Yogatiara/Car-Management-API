@@ -2,7 +2,7 @@ const ApiError = require('../utils/ApiError');
 
 const checkCarBody = (req, res, next) => {
   try {
-    const { name, age, address } = req.body;
+    const { name, type } = req.body;
 
     if (!name) {
       next(
@@ -11,16 +11,9 @@ const checkCarBody = (req, res, next) => {
           400
         )
       );
-    } else if (!age) {
+    } else if (!type) {
       next(
-        new ApiError('age must be reqired', 400)
-      );
-    } else if (!address) {
-      next(
-        new ApiError(
-          'address must be required',
-          400
-        )
+        new ApiError('type must be reqired', 400)
       );
     }
 
@@ -33,4 +26,4 @@ const checkCarBody = (req, res, next) => {
   }
 };
 
-module.exports = checkUserBody;
+module.exports = checkCarBody;

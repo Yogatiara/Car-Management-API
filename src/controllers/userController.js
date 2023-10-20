@@ -28,7 +28,10 @@ const findUser = async (req, res, next) => {
     const userData = await User.findAll();
     if (userData == 0) {
       return next(
-        new ApiError('Database is empty!', 400)
+        new ApiError(
+          'User database is empty!',
+          400
+        )
       );
     }
 
@@ -51,11 +54,7 @@ const findUserById = async (req, res, next) => {
       },
     });
 
-    if (userData == 0) {
-      return next(
-        new ApiError('Database is empty!', 400)
-      );
-    } else if (userData === null) {
+    if (userData === null) {
       return next(
         new ApiError('data is not found!', 400)
       );
@@ -81,11 +80,7 @@ const updateUser = async (req, res, next) => {
       },
     });
 
-    if (userData == 0) {
-      return next(
-        new ApiError('Database is empty!', 400)
-      );
-    } else if (userData === null) {
+    if (userData === null) {
       return next(
         new ApiError('data is not found!', 400)
       );
@@ -127,11 +122,7 @@ const deleteUser = async (req, res, next) => {
       },
     });
 
-    if (userData == 0) {
-      return next(
-        new ApiError('Database is empty!', 400)
-      );
-    } else if (userData === null) {
+    if (userData === null) {
       return next(
         new ApiError('data is not found!', 400)
       );
@@ -163,7 +154,10 @@ const clearUser = async (req, res, next) => {
 
     if (userData == 0) {
       return next(
-        new ApiError('Database is empty!', 400)
+        new ApiError(
+          'User databae is empty!',
+          400
+        )
       );
     }
 
