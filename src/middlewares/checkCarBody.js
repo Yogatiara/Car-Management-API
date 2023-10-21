@@ -3,6 +3,7 @@ const ApiError = require('../utils/ApiError');
 const checkCarBody = (req, res, next) => {
   try {
     const { name, type } = req.body;
+    const image = req.file;
 
     if (!name) {
       next(
@@ -14,6 +15,10 @@ const checkCarBody = (req, res, next) => {
     } else if (!type) {
       next(
         new ApiError('type must be reqired', 400)
+      );
+    } else if (!image) {
+      next(
+        new ApiError('image must be reqired', 400)
       );
     }
 

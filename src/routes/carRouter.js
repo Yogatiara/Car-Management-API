@@ -7,7 +7,12 @@ const upload = require('../middlewares/uploadImage');
 
 router
   .route('/')
-  .post(upload.single('image'), Car.createCar)
+  .post(
+    upload.single('image'),
+    checkCarBody,
+
+    Car.createCar
+  )
   .get(Car.findCar);
 
 module.exports = router;

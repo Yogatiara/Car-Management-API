@@ -6,29 +6,28 @@ const createCar = async (req, res, next) => {
   try {
     const { name, type } = req.body;
     const file = req.file;
-    let image;
+    const splitNameFile =
+      file.originalname.split('.');
+    const extentionFile =
+      splitNameFile[splitNameFile.length - 1];
 
-    if (file) {
-      const splitNameFile =
-        file.originalname.split('.');
-      const extentionFile =
-        splitNameFile[splitNameFile.length - 1];
+    const uploadImage = await imagekit.upload({
+      file: file.buffer,
+      fileName: `${file.name}.${extentionFile}`,
+    });
 
-      const uploadImage = await imagekit.upload({
-        file: file.buffer,
-        fileName: `${file.name}.${extentionFile}`,
-      });
-
-      image = uploadImage.url;
-
-      const newCar = await Car.create({
-        name: name,
-        type: type,
-      });
-    }
-
+    const newCar = await Car.create({
+      name: name,
+      type: type,
+      image: uploadImage.url,
+    });
     res.status(200).json({
       status: 'Success',
+      data: {
+        carData: {
+          newCar,
+        },
+      },
     });
   } catch (err) {
     next(new ApiError(err.message, 500));
@@ -58,19 +57,15 @@ const findCar = async (req, res, next) => {
   }
 };
 
-const findUserById = async (req, res, next) => {
+const findCarById = async (req, res, next) => {
   try {
-    const userData = await User.findOne({
+    const carData = await User.findOne({
       where: {
         id: req.params.id,
       },
     });
 
-    if (userData == 0) {
-      return next(
-        new ApiError('Database is empty!', 400)
-      );
-    } else if (userData === null) {
+    if (userData === null) {
       return next(
         new ApiError('data is not found!', 400)
       );
@@ -79,7 +74,7 @@ const findUserById = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: {
-        userData,
+        carData,
       },
     });
   } catch (err) {
@@ -87,31 +82,26 @@ const findUserById = async (req, res, next) => {
   }
 };
 
-const updateUser = async (req, res, next) => {
+const updateCar = async (req, res, next) => {
   try {
-    const { name, age, address, role } = req.body;
-    const userData = await User.findOne({
+    const { name, type, image } = req.body;
+    const carData = await Car.findOne({
       where: {
         id: req.params.id,
       },
     });
 
-    if (userData == 0) {
-      return next(
-        new ApiError('Database is empty!', 400)
-      );
-    } else if (userData === null) {
+    if (carData === null) {
       return next(
         new ApiError('data is not found!', 400)
       );
     }
 
-    const updatedUser = await User.update(
+    const updatedCar = await Car.update(
       {
         name: name,
-        age: age,
-        address: address,
-        role: role,
+        type: type,
+        image: image,
       },
       {
         where: {
@@ -124,8 +114,8 @@ const updateUser = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: {
-        update_user: {
-          updatedUser,
+        update_car: {
+          updatedCar,
         },
       },
     });
@@ -134,25 +124,25 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-const deleteUser = async (req, res, next) => {
+const deleteCar = async (req, res, next) => {
   try {
-    const userData = await User.findOne({
+    const carData = await Car.findOne({
       where: {
         id: req.params.id,
       },
     });
 
-    if (userData == 0) {
+    if (carData == 0) {
       return next(
         new ApiError('Database is empty!', 400)
       );
-    } else if (userData === null) {
+    } else if (carData === null) {
       return next(
         new ApiError('data is not found!', 400)
       );
     }
 
-    const deletedUser = await User.destroy({
+    const deletedCar = await Car.destroy({
       where: {
         id: req.params.id,
       },
@@ -162,8 +152,8 @@ const deleteUser = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: {
-        deleted_user: {
-          deletedUser,
+        deleted_car: {
+          deletedCar,
         },
       },
     });
@@ -172,17 +162,17 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-const clearUser = async (req, res, next) => {
+const clearCar = async (req, res, next) => {
   try {
-    const userData = await User.findAll();
+    const carData = await Car.findAll();
 
-    if (userData == 0) {
+    if (carData == 0) {
       return next(
         new ApiError('Database is empty!', 400)
       );
     }
 
-    const userCleared = await User.destroy({
+    const carCleared = await Car.destroy({
       where: {},
       returning: true,
     });
@@ -190,8 +180,8 @@ const clearUser = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: {
-        user_cleared: {
-          userCleared,
+        car_cleared: {
+          carCleared,
         },
       },
     });
@@ -203,8 +193,8 @@ const clearUser = async (req, res, next) => {
 module.exports = {
   createCar,
   findCar,
-  // findUserById,
-  // updateUser,
-  // deleteUser,
-  // clearUser,
+  findCarById,
+  updateCar,
+  deleteCar,
+  clearCar,
 };

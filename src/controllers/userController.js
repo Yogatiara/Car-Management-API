@@ -3,12 +3,14 @@ const ApiError = require('../utils/ApiError');
 
 const createUser = async (req, res, next) => {
   try {
-    const { name, age, address } = req.body;
+    const { name, age, noTelepon, address } =
+      req.body;
     console.log(name);
 
     const newUser = await User.create({
       name: name,
       age: age,
+      noTelepon: noTelepon,
       address: address,
     });
 
