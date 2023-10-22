@@ -1,42 +1,11 @@
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createAdmin = async (req, res, next) => {
-  try {
-    const { name, age, address, role } = req.body;
-
-    if (age <= 17) {
-      return next(
-        new ApiError(
-          'Sorry, Not old enough to be an admin. ',
-          403
-        )
-      );
-    }
-
-    const newAdmin = await User.create({
-      name: name,
-      age: age,
-      role: role,
-      address: address,
-    });
-
-    res.status(200).json({
-      status: 'Success',
-      data: {
-        dataUser: newUser,
-      },
-    });
-  } catch (err) {
-    next(new ApiError(err.message, 500));
-  }
-};
-
-const findMember = async (req, res, next) => {
+const findMemberById = async (req, res, next) => {
   try {
     const memberData = await User.findOne({
       where: {
-        role: req.query.role,
+        id: req.params.id,
       },
     });
 
@@ -166,9 +135,7 @@ const clearMember = async (req, res, next) => {
 };
 
 module.exports = {
-  createAdmin,
-  findMember,
-  findMember,
+  findMemberById,
   updateMember,
   deleteMember,
   clearMember,

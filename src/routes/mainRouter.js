@@ -4,7 +4,7 @@ const Admin = require('./adminRouter');
 const Car = require('./carRouter');
 const Rental = require('./rentalRouter');
 const Auth = require('./authRouter');
-const Member = require('./userRouter');
+const Member = require('./memberRouter');
 
 router.use('/api/v1/admins', Admin);
 router.use('/api/v1/cars', Car);

@@ -98,6 +98,42 @@ const register = async (req, res, next) => {
   }
 };
 
+const login = async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await Auth.findOne({
+      where: {
+        email: email,
+      },
+      include: User,
+    });
+
+    if (
+      user &&
+      bcrypt.compareSync(password, user.password)
+    ) {
+      const token = jwt.sign(
+        {
+          id: user.userId,
+          name: user.User.name,
+          role: user.User.role,
+          email: user.email,
+        },
+        process.env.JWT_SECRET
+      );
+      res.status(200).json({
+        status: 'success',
+        message: 'Login success',
+        data: token,
+      });
+    }
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 module.exports = {
   register,
+  login,
 };
