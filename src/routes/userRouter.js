@@ -1,18 +1,18 @@
 const router = require('express').Router();
 
-const checkUserBody = require('../middlewares/checkUserBody');
-const User = require('../controllers/userController');
+const checkUserBodyRequire = require('../middlewares/checkUserBodyRequire');
+const User = require('../controllers/memberController');
 
 router
   .route('/')
-  .post(checkUserBody, User.createUser)
-  .get(User.findUser)
-  .delete(User.clearUser);
+  .post(checkUserBodyRequire, User.createAdmin);
+//   .get(User.findUser)
+//   .delete(User.clearUser);
 
-router
-  .route('/:id')
-  .get(User.findUserById)
-  .put(User.updateUser)
-  .delete(User.deleteUser);
+// router
+//   .route('/:id')
+//   .get(User.findUserById)
+//   .put(User.updateUser)
+//   .delete(User.deleteUser);
 
 module.exports = router;

@@ -10,25 +10,26 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       name: {
-        type: Sequelize.STRING,
         allowNull: false,
+        type: Sequelize.STRING,
       },
-      noTelepon: {
-        type: Sequelize.STRING,
+      age: {
         allowNull: false,
+        type: Sequelize.INTEGER,
+      },
+      rentalId: {
+        type: Sequelize.INTEGER,
       },
       address: {
-        type: Sequelize.STRING,
         allowNull: false,
+        type: Sequelize.STRING,
       },
       role: {
-        allowNull: false,
-        type: Sequelize.ENUM(
+        type: Sequelize.ENUM([
           'superadmin',
           'admin',
-          'member'
-        ),
-        defaultValue: 'member',
+          'member',
+        ]),
       },
       createdAt: {
         allowNull: false,

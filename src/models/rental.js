@@ -17,7 +17,7 @@ module.exports = (sequelize, DataTypes) => {
 
       Rental.belongsTo(models.User, {
         foreignKey: {
-          name: 'rentalId',
+          name: 'userId',
         },
       });
     }

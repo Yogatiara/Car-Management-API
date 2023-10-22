@@ -10,10 +10,12 @@ const createCar = async (req, res, next) => {
       file.originalname.split('.');
     const extentionFile =
       splitNameFile[splitNameFile.length - 1];
+    const nameFile =
+      splitNameFile[splitNameFile.length - 2];
 
     const uploadImage = await imagekit.upload({
       file: file.buffer,
-      fileName: `${file.name}.${extentionFile}`,
+      fileName: `${nameFile}.${extentionFile}`,
     });
 
     const newCar = await Car.create({

@@ -19,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
 
       User.hasMany(models.Rental, {
         foreignKey: {
-          name: 'rentalId',
+          name: 'userId',
           onDelete: 'SET NULL',
           onUpdate: 'CASCADE',
         },
@@ -29,15 +29,15 @@ module.exports = (sequelize, DataTypes) => {
   User.init(
     {
       name: DataTypes.STRING,
-      noTelepon: DataTypes.STRING,
+      age: DataTypes.INTEGER,
+      rentalId: DataTypes.INTEGER,
       address: DataTypes.STRING,
       role: {
-        allowNull: false,
-        type: DataTypes.ENUM(
-          'super admin',
+        type: DataTypes.ENUM([
+          'superadmin',
           'admin',
-          'member'
-        ),
+          'member',
+        ]),
         defaultValue: 'member',
       },
     },

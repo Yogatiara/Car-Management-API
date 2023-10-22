@@ -1,16 +1,23 @@
 const { User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
-const createUser = async (req, res, next) => {
+const createAdmin = async (req, res, next) => {
   try {
-    const { name, age, noTelepon, address } =
-      req.body;
-    console.log(name);
+    const { name, age, address, role } = req.body;
 
-    const newUser = await User.create({
+    if (age <= 17) {
+      return next(
+        new ApiError(
+          'Sorry, Not old enough to be an admin. ',
+          403
+        )
+      );
+    }
+
+    const newAdmin = await User.create({
       name: name,
       age: age,
-      noTelepon: noTelepon,
+      role: role,
       address: address,
     });
 
@@ -25,38 +32,15 @@ const createUser = async (req, res, next) => {
   }
 };
 
-const findUser = async (req, res, next) => {
+const findMember = async (req, res, next) => {
   try {
-    const userData = await User.findAll();
-    if (userData == 0) {
-      return next(
-        new ApiError(
-          'User database is empty!',
-          400
-        )
-      );
-    }
-
-    res.status(200).json({
-      status: 'success',
-      data: {
-        userData,
-      },
-    });
-  } catch (err) {
-    next(new ApiError(err.message, 500));
-  }
-};
-
-const findUserById = async (req, res, next) => {
-  try {
-    const userData = await User.findOne({
+    const memberData = await User.findOne({
       where: {
-        id: req.params.id,
+        role: req.query.role,
       },
     });
 
-    if (userData === null) {
+    if (memberData === null) {
       return next(
         new ApiError('data is not found!', 400)
       );
@@ -73,22 +57,22 @@ const findUserById = async (req, res, next) => {
   }
 };
 
-const updateUser = async (req, res, next) => {
+const updateMember = async (req, res, next) => {
   try {
     const { name, age, address, role } = req.body;
-    const userData = await User.findOne({
+    const memberData = await User.findOne({
       where: {
         id: req.params.id,
       },
     });
 
-    if (userData === null) {
+    if (memberData === null) {
       return next(
         new ApiError('data is not found!', 400)
       );
     }
 
-    const updatedUser = await User.update(
+    const updatedMember = await User.update(
       {
         name: name,
         age: age,
@@ -106,8 +90,8 @@ const updateUser = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: {
-        update_user: {
-          updatedUser,
+        update_Member: {
+          updatedMember,
         },
       },
     });
@@ -116,21 +100,21 @@ const updateUser = async (req, res, next) => {
   }
 };
 
-const deleteUser = async (req, res, next) => {
+const deleteMember = async (req, res, next) => {
   try {
-    const userData = await User.findOne({
+    const memberData = await User.findOne({
       where: {
         id: req.params.id,
       },
     });
 
-    if (userData === null) {
+    if (memberData === null) {
       return next(
         new ApiError('data is not found!', 400)
       );
     }
 
-    const deletedUser = await User.destroy({
+    const deletedMember = await User.destroy({
       where: {
         id: req.params.id,
       },
@@ -140,8 +124,8 @@ const deleteUser = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: {
-        deleted_user: {
-          deletedUser,
+        deleted_member: {
+          deletedMember,
         },
       },
     });
@@ -150,11 +134,11 @@ const deleteUser = async (req, res, next) => {
   }
 };
 
-const clearUser = async (req, res, next) => {
+const clearMember = async (req, res, next) => {
   try {
-    const userData = await User.findAll();
+    const memberData = await User.findAll();
 
-    if (userData == 0) {
+    if (memberData == 0) {
       return next(
         new ApiError(
           'User databae is empty!',
@@ -163,7 +147,7 @@ const clearUser = async (req, res, next) => {
       );
     }
 
-    const userCleared = await User.destroy({
+    const memberCleared = await User.destroy({
       where: {},
       returning: true,
     });
@@ -171,8 +155,8 @@ const clearUser = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: {
-        user_cleared: {
-          userCleared,
+        member_cleared: {
+          memberCleared,
         },
       },
     });
@@ -182,10 +166,10 @@ const clearUser = async (req, res, next) => {
 };
 
 module.exports = {
-  createUser,
-  findUser,
-  findUserById,
-  updateUser,
-  deleteUser,
-  clearUser,
+  createAdmin,
+  findMember,
+  findMember,
+  updateMember,
+  deleteMember,
+  clearMember,
 };

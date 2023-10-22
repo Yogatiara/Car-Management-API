@@ -1,9 +1,8 @@
 const ApiError = require('../utils/ApiError');
 
-const checkUserBody = (req, res, next) => {
+const checkUserBodyRequire = (req, res, next) => {
   try {
-    const { name, age, noTelepon, address } =
-      req.body;
+    const { name, age, address } = req.body;
 
     if (!name) {
       next(
@@ -23,13 +22,6 @@ const checkUserBody = (req, res, next) => {
           400
         )
       );
-    } else if (!noTelepon) {
-      next(
-        new ApiError(
-          'noTelepon must be required',
-          400
-        )
-      );
     }
 
     next();
@@ -41,4 +33,4 @@ const checkUserBody = (req, res, next) => {
   }
 };
 
-module.exports = checkUserBody;
+module.exports = checkUserBodyRequire;

@@ -1,6 +1,6 @@
 const ApiError = require('../utils/ApiError');
 
-const checkCarBody = (req, res, next) => {
+const checkCarBodyRequire = (req, res, next) => {
   try {
     const { name, type } = req.body;
     const image = req.file;
@@ -31,4 +31,4 @@ const checkCarBody = (req, res, next) => {
   }
 };
 
-module.exports = checkCarBody;
+module.exports = checkCarBodyRequire;

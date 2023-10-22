@@ -4,7 +4,7 @@ const cors = require('cors');
 
 const router = require('./routes/mainRouter');
 const errorhandlerController = require('./controllers/errorHandlerController');
-const checkCarBody = require('./middlewares/checkCarBody');
+const checkCarBody = require('./middlewares/checkCarBodyRequire');
 
 const app = express();
 
