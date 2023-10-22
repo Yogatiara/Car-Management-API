@@ -22,6 +22,7 @@ const createCar = async (req, res, next) => {
       name: name,
       type: type,
       image: uploadImage.url,
+      createdBy: req.user.name,
     });
     res.status(200).json({
       status: 'Success',
@@ -104,6 +105,7 @@ const updateCar = async (req, res, next) => {
         name: name,
         type: type,
         image: image,
+        updatedBy: req.user.name,
       },
       {
         where: {

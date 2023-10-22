@@ -27,6 +27,8 @@ module.exports = (sequelize, DataTypes) => {
         'large'
       ),
       image: DataTypes.TEXT,
+      createdBy: DataTypes.STRING,
+      updatedBy: DataTypes.STRING,
     },
     {
       sequelize,
