@@ -1,9 +1,18 @@
-const { User } = require('../models');
+const bcrypt = require('bcrypt');
+
+const { User, Auth } = require('../models');
 const ApiError = require('../utils/ApiError');
 
 const createAdmin = async (req, res, next) => {
   try {
-    const { name, age, address, role } = req.body;
+    const {
+      name,
+      email,
+      phoneNumber,
+      age,
+      address,
+      role,
+    } = req.body;
 
     if (age <= 17) {
       return next(
@@ -13,6 +22,43 @@ const createAdmin = async (req, res, next) => {
         )
       );
     }
+    const adminEmail = await Auth.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (adminEmail) {
+      return next(
+        new ApiError(
+          'User email already taken',
+          400
+        )
+      );
+    }
+
+    const adminPhoneNumber = await Auth.findOne({
+      where: {
+        phoneNumber: phoneNumber,
+      },
+    });
+
+    if (adminPhoneNumber) {
+      return next(
+        new ApiError(
+          'Telepon number already taken',
+          400
+        )
+      );
+    }
+
+    const password = process.env.ADMIN_PASSWORD;
+
+    const saltRounds = 10;
+    const hashedPassword = bcrypt.hashSync(
+      password,
+      saltRounds
+    );
 
     const newAdmin = await User.create({
       name: name,
@@ -21,10 +67,20 @@ const createAdmin = async (req, res, next) => {
       address: address,
     });
 
+    const newAuth = await Auth.create({
+      email: email,
+      userId: newAdmin.id,
+      phoneNumber: phoneNumber,
+      password: hashedPassword,
+    });
+
     res.status(200).json({
       status: 'Success',
       data: {
-        dataUser: newAdmin,
+        dataAdmin: {
+          ...newAdmin,
+          ...newAuth,
+        },
       },
     });
   } catch (err) {
@@ -36,7 +92,7 @@ const findAdmin = async (req, res, next) => {
   try {
     const adminData = await User.findOne({
       where: {
-        id: req.query.role,
+        role: req.query.role,
       },
     });
 
@@ -49,7 +105,7 @@ const findAdmin = async (req, res, next) => {
     res.status(200).json({
       status: 'success',
       data: {
-        userData,
+        adminData,
       },
     });
   } catch (err) {

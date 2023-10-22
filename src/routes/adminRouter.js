@@ -1,17 +1,31 @@
 const router = require('express').Router();
 
 const checkUserBodyRequire = require('../middlewares/checkUserBodyRequire');
+const checkRole = require('../middlewares/checkRole');
+const authenticate = require('../middlewares/authenticate');
 const Admin = require('../controllers/adminController');
 
 router
   .route('/')
-  .post(checkUserBodyRequire, Admin.createAdmin)
-  .get(Admin.findAdmin)
-  .delete(Admin.clearAdmin);
+  .post(
+    authenticate,
+    checkRole('superadmin'),
+    checkUserBodyRequire,
+    Admin.createAdmin
+  )
+  .get(
+    authenticate,
+    checkRole('superadmin', 'admin'),
+    Admin.findAdmin
+  )
+  .delete(
+    authenticate,
+    checkRole('superadmin'),
+    Admin.clearAdmin
+  );
 
 router
   .route('/:id')
-  .get(Admin.findAdmin)
   .put(Admin.updateAdmin)
   .delete(Admin.deleteAdmin);
 

@@ -4,12 +4,40 @@ const jwt = require('jsonwebtoken');
 const { Auth, User } = require('../models');
 const ApiError = require('../utils/ApiError');
 
+const checkToken = async (req, res, next) => {
+  try {
+    const bearerToken = req.headers.authorization;
+
+    if (!bearerToken) {
+      next(
+        new ApiError('token is not found', 401)
+      );
+    }
+    const token = bearerToken.split('Bearer ')[1];
+
+    const payload = jwt.verify(
+      token,
+      process.env.JWT_SECRET
+    );
+
+    delete payload.iat;
+
+    res.status(200).json({
+      data: {
+        payload,
+      },
+    });
+  } catch (err) {
+    next(new ApiError(err.message, 500));
+  }
+};
+
 const register = async (req, res, next) => {
   try {
     const {
       name,
       email,
-      noTelepon,
+      phoneNumber,
       password,
       confirmPassword,
       age,
@@ -23,7 +51,7 @@ const register = async (req, res, next) => {
     });
 
     if (memberEmail) {
-      next(
+      return next(
         new ApiError(
           'User email already taken',
           400
@@ -31,14 +59,14 @@ const register = async (req, res, next) => {
       );
     }
 
-    const memberNoTelepon = await Auth.findOne({
+    const memberPhoneNumber = await Auth.findOne({
       where: {
-        noTelepon,
+        phoneNumber: phoneNumber,
       },
     });
 
-    if (memberNoTelepon) {
-      next(
+    if (memberPhoneNumber) {
+      return next(
         new ApiError(
           'Telepon number already taken',
           400
@@ -47,7 +75,7 @@ const register = async (req, res, next) => {
     }
 
     if (password <= 8) {
-      next(
+      return next(
         new ApiError(
           'Minimum password must be 8 character'
         )
@@ -55,7 +83,7 @@ const register = async (req, res, next) => {
     }
 
     if (password !== confirmPassword) {
-      next(
+      return next(
         new ApiError(
           'password does not match',
           400
@@ -82,6 +110,7 @@ const register = async (req, res, next) => {
     const newAuth = await Auth.create({
       email,
       noTelepon,
+      userId: newMember.id,
       password: hashedPassword,
       confirmPassword: hashedConfirmPassword,
     });
@@ -116,7 +145,7 @@ const login = async (req, res, next) => {
       const token = jwt.sign(
         {
           id: user.userId,
-          name: user.User.name,
+          username: user.User.name,
           role: user.User.role,
           email: user.email,
         },
@@ -136,4 +165,5 @@ const login = async (req, res, next) => {
 module.exports = {
   register,
   login,
+  checkToken,
 };
